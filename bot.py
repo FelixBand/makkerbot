@@ -16,7 +16,7 @@ async def on_message(message):
         pass
 
 # Replace 'YOUR_DISCORD_TOKEN' with your actual Discord bot token
-with open('api-key.txt', 'r') as file:
+with open('apikey/api-key.txt', 'r') as file:
     api_key = file.read().strip()
 
 # Now, use the content of the file with bot.run()
