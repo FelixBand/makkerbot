@@ -19,6 +19,5 @@ async def on_message(message):
 with open('api-key.txt', 'r') as file:
     api_key = file.read().strip()
 
-
 # Now, use the content of the file with bot.run()
 bot.run(api_key)
