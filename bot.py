@@ -27,7 +27,7 @@ def get_random_game_name():
                 return game_name
         time.sleep(1)  # Avoid hammering the API
 
-@tasks.loop(hours=1)
+@tasks.loop(minutes=30)
 async def change_status():
     game_name = get_random_game_name()
     await bot.change_presence(activity=discord.Game(name=game_name))
