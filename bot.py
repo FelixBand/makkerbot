@@ -36,7 +36,7 @@ async def change_status():
 @bot.event
 async def on_message(message):
     if bot.user.mentioned_in(message):
-        await message.channel.send("Hello! I'm here!")
+        await message.channel.send("Ik hou van jou.")
 
 with open('api-key.txt', 'r') as file:
     api_key = file.read().strip()
