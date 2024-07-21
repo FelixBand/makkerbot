@@ -15,7 +15,7 @@ async def on_message(message):
     if bot.user.mentioned_in(message):  # Check if bot is mentioned in the message
         pass
 
-with open('apikey/api-key.txt', 'r') as file: # Gotta be careful not to leak this one. Trusting gitignore
+with open('api-key.txt', 'r') as file: # Gotta be careful not to leak this one. Trusting gitignore
     api_key = file.read().strip()
 
 # Now, use the content of the file with bot.run()
