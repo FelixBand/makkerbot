@@ -9,7 +9,7 @@ intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix='!', intents=intents)
 
-USER_TO_MONITOR = 'felixband'
+USER_TO_MONITOR = 'ltsbeary'
 GIF_SERVICES = ['https://tenor.com', 'https://giphy.com', 'https://imgur.com', 'https://cdn.discord.com']
 
 @bot.event
