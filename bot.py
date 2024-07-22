@@ -9,6 +9,9 @@ intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix='!', intents=intents)
 
+USER_TO_MONITOR = 'felixband'
+GIF_SERVICES = ['https://tenor.com', 'https://giphy.com', 'https://imgur.com', 'https://cdn.discord.com']
+
 @bot.event
 async def on_ready():
     print(f'Logged in as {bot.user.name}')
@@ -35,8 +38,13 @@ async def change_status():
 
 @bot.event
 async def on_message(message):
+    if message.author.name == USER_TO_MONITOR:
+        for gif_service in GIF_SERVICES:
+            if message.content.startswith(gif_service):
+                await message.reply("epic embed fail")
+                break
     if bot.user.mentioned_in(message):
-        await message.channel.send("Ik hou van jou.")
+        await message.channel.send("Hello! I'm here!")
 
 with open('api-key.txt', 'r') as file:
     api_key = file.read().strip()
