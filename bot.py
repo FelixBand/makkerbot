@@ -14,7 +14,10 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 
 USER_TO_MONITOR = 'ltsbeary'
 GIF_SERVICES = ['https://tenor.com', 'https://giphy.com', 'https://imgur.com', 'https://cdn.discord.com']
-MEME_CHANNEL_ID = 1120692192990744658 #1066079471439978551
+if bot.user.name == "Testmakker":
+    MEME_CHANNEL_ID = 1120692192990744658
+elif bot.user.name == "Je beste makker":
+    MEME_CHANNEL_ID = 1066079471439978551 # luitenant-generaal
 
 REDDIT_CLIENT_ID = 'YOUR_REDDIT_CLIENT_ID'
 REDDIT_CLIENT_SECRET = 'YOUR_REDDIT_CLIENT_SECRET'
