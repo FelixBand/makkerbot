@@ -3,6 +3,7 @@ from discord.ext import commands, tasks
 import requests
 import random
 import time
+import os
 
 # Initialize the Discord bot
 intents = discord.Intents.default()
@@ -36,6 +37,19 @@ async def change_status():
     await bot.change_presence(activity=discord.Game(name=game_name))
     print(f'Changed status to: Playing {game_name}')
 
+def load_responses(file_path):
+    with open(file_path, 'r') as file:
+        return file.readlines()
+
+general_responses = load_responses('responses/responses.txt')
+
+def get_personal_response(user_name):
+    personal_file_path = f'responses/responses-{user_name}.txt'
+    if os.path.exists(personal_file_path):
+        if random.random() < 0.3:  # 30% chance
+            return load_responses(personal_file_path)
+    return general_responses
+
 @bot.event
 async def on_message(message):
     if message.author.name == USER_TO_MONITOR:
@@ -44,7 +58,9 @@ async def on_message(message):
                 await message.reply("epic embed fail")
                 break
     if bot.user.mentioned_in(message):
-        await message.channel.send("Hello! I'm here!")
+        responses = get_personal_response(message.author.name)
+        response = random.choice(responses)
+        await message.reply(response.strip())
 
 with open('api-key.txt', 'r') as file:
     api_key = file.read().strip()
