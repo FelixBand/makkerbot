@@ -4,6 +4,8 @@ import requests
 import random
 import time
 import os
+from datetime import datetime, time as datetime_time
+import praw
 
 # Initialize the Discord bot
 intents = discord.Intents.default()
@@ -12,11 +14,24 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 
 USER_TO_MONITOR = 'ltsbeary'
 GIF_SERVICES = ['https://tenor.com', 'https://giphy.com', 'https://imgur.com', 'https://cdn.discord.com']
+MEME_CHANNEL_ID = 1120692192990744658 #1066079471439978551
+
+REDDIT_CLIENT_ID = 'YOUR_REDDIT_CLIENT_ID'
+REDDIT_CLIENT_SECRET = 'YOUR_REDDIT_CLIENT_SECRET'
+REDDIT_USER_AGENT = 'YOUR_USER_AGENT'
+
+# Initialize Reddit instance
+reddit = praw.Reddit(
+    client_id=REDDIT_CLIENT_ID,
+    client_secret=REDDIT_CLIENT_SECRET,
+    user_agent=REDDIT_USER_AGENT
+)
 
 @bot.event
 async def on_ready():
     print(f'Logged in as {bot.user.name}')
     change_status.start()  # Start the task to change status
+    #post_meme.start()  # Start the task to post memes
 
 def get_random_game_name():
     while True:
@@ -61,6 +76,26 @@ async def on_message(message):
         responses = get_personal_response(message.author.name)
         response = random.choice(responses)
         await message.reply(response.strip())
+
+def get_random_meme():
+    subreddit = reddit.subreddit("memes")
+    meme_list = list(subreddit.hot(limit=50))  # Fetch top 50 hot posts
+    meme = random.choice(meme_list)
+    return meme.url
+
+@tasks.loop(hours=5)
+async def post_meme():
+    current_time = datetime.now().time()
+    start_time = datetime_time(11, 0)  # 11:00
+    end_time = datetime_time(21, 0)    # 21:00
+    if start_time <= current_time <= end_time:
+        meme_channel = bot.get_channel(MEME_CHANNEL_ID)
+        if meme_channel is not None:
+            meme_url = get_random_meme()
+            await meme_channel.send(meme_url)
+            print(f'Posted meme: {meme_url}')
+        else:
+            print(f'Channel with ID {MEME_CHANNEL_ID} not found.')
 
 with open('api-key.txt', 'r') as file:
     api_key = file.read().strip()
