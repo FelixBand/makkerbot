@@ -14,14 +14,10 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 
 USER_TO_MONITOR = 'ltsbeary'
 GIF_SERVICES = ['https://tenor.com', 'https://giphy.com', 'https://imgur.com', 'https://cdn.discord.com']
-if bot.user.name == "Testmakker":
-    MEME_CHANNEL_ID = 1120692192990744658
-elif bot.user.name == "Je beste makker":
-    MEME_CHANNEL_ID = 1066079471439978551 # luitenant-generaal
 
-with open('reddit-secret/secret.txt', 'r') as file:
+with open('reddit-secrets/secret.txt', 'r') as file:
     REDDIT_CLIENT_SECRET = file.read().strip()
-with open('reddit-secret/id.txt', 'r') as file:
+with open('reddit-secrets/id.txt', 'r') as file:
     REDDIT_CLIENT_ID = file.read().strip()
 REDDIT_USER_AGENT = 'Chrome'
 
@@ -88,11 +84,14 @@ def get_random_meme():
     meme = random.choice(meme_list)
     return meme.url
 
+MEME_CHANNEL_ID = 1120692192990744658 # test channel
+#MEME_CHANNEL_ID = 1066079471439978551 # luitenant-generaal
+
 @tasks.loop(hours=5)
 async def post_meme():
     current_time = datetime.now().time()
     start_time = datetime_time(11, 0)  # 11:00
-    end_time = datetime_time(21, 0)    # 21:00
+    end_time = datetime_time(23, 0)    # 21:00
     if start_time <= current_time <= end_time:
         meme_channel = bot.get_channel(MEME_CHANNEL_ID)
         if meme_channel is not None:
