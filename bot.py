@@ -36,7 +36,7 @@ reddit = praw.Reddit(
 async def on_ready():
     print(f'Logged in as {bot.user.name}')
     change_status.start()  # Start the task to change status
-    #post_meme.start()  # Start the task to post memes
+    post_meme.start()  # Start the task to post memes
 
 def get_random_game_name():
     while True:
