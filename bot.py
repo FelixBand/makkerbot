@@ -87,7 +87,7 @@ def get_random_meme():
 #MEME_CHANNEL_ID = 1120692192990744658 # test channel
 MEME_CHANNEL_ID = 1066079471439978551 # luitenant-generaal
 
-@tasks.loop(hours=5)
+@tasks.loop(hours=3)
 async def post_meme():
     current_time = datetime.now().time()
     start_time = datetime_time(11, 0)  # 11:00
