@@ -19,9 +19,11 @@ if bot.user.name == "Testmakker":
 elif bot.user.name == "Je beste makker":
     MEME_CHANNEL_ID = 1066079471439978551 # luitenant-generaal
 
-REDDIT_CLIENT_ID = 'YOUR_REDDIT_CLIENT_ID'
-REDDIT_CLIENT_SECRET = 'YOUR_REDDIT_CLIENT_SECRET'
-REDDIT_USER_AGENT = 'YOUR_USER_AGENT'
+with open('reddit-secret/secret.txt', 'r') as file:
+    REDDIT_CLIENT_SECRET = file.read().strip()
+with open('reddit-secret/id.txt', 'r') as file:
+    REDDIT_CLIENT_ID = file.read().strip()
+REDDIT_USER_AGENT = 'Chrome'
 
 # Initialize Reddit instance
 reddit = praw.Reddit(
