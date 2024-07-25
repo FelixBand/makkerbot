@@ -84,8 +84,8 @@ def get_random_meme():
     meme = random.choice(meme_list)
     return meme.url
 
-MEME_CHANNEL_ID = 1120692192990744658 # test channel
-#MEME_CHANNEL_ID = 1066079471439978551 # luitenant-generaal
+#MEME_CHANNEL_ID = 1120692192990744658 # test channel
+MEME_CHANNEL_ID = 1066079471439978551 # luitenant-generaal
 
 @tasks.loop(hours=5)
 async def post_meme():
