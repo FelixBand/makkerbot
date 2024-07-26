@@ -86,7 +86,7 @@ def get_random_meme():
     return meme.url
 
 def get_random_article():
-    subreddit = reddit.subreddit("incestconfessions")
+    subreddit = reddit.subreddit("help")
     article_list = list(subreddit.hot(limit=50))  # Fetch top 50 hot posts
     article = random.choice(article_list)
     json_url = f"https://www.reddit.com{article.permalink}.json"
@@ -102,7 +102,7 @@ def get_random_article():
 #MAIN_CHANNEL_ID = 1120692192990744658  # test channel
 MAIN_CHANNEL_ID = 1066079471439978551  # luitenant-generaal
 
-@tasks.loop(hours=3)
+@tasks.loop(hours=2)
 async def post_meme():
     current_time = datetime.now().time()
     start_time = datetime_time(11, 0)  # 11:00
@@ -116,7 +116,7 @@ async def post_meme():
         else:
             print(f'Channel with ID {MAIN_CHANNEL_ID} not found.')
 
-@tasks.loop(hours=1)
+@tasks.loop(minutes=180)
 async def post_article():
     help_channel = bot.get_channel(MAIN_CHANNEL_ID)
     if help_channel is not None:
