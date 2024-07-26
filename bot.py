@@ -86,7 +86,7 @@ def get_random_meme():
     return meme.url
 
 def get_random_article():
-    subreddit = reddit.subreddit("help")
+    subreddit = reddit.subreddit("funfacts")
     article_list = list(subreddit.hot(limit=50))  # Fetch top 50 hot posts
     article = random.choice(article_list)
     json_url = f"https://www.reddit.com{article.permalink}.json"
@@ -116,7 +116,7 @@ async def post_meme():
         else:
             print(f'Channel with ID {MAIN_CHANNEL_ID} not found.')
 
-@tasks.loop(minutes=180)
+@tasks.loop(hours=6)
 async def post_article():
     help_channel = bot.get_channel(MAIN_CHANNEL_ID)
     if help_channel is not None:
