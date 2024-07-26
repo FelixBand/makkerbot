@@ -36,7 +36,7 @@ async def on_ready():
     post_meme.start()  # Start the task to post memes
     post_article.start()  # Start the task to post articles
 
-def get_random_game_name():
+async def get_random_game_name():
     while True:
         # Get a random appid between 1 and 999999
         appid = random.randint(1, 999999)
@@ -47,7 +47,7 @@ def get_random_game_name():
             if str(appid) in data and data[str(appid)]['success']:
                 game_name = data[str(appid)]['data']['name']
                 return game_name
-        asyncio.sleep(1)  # Avoid hammering the API
+        await asyncio.sleep(1)  # Avoid hammering the API
 
 @tasks.loop(minutes=30)
 async def change_status():
