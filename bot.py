@@ -6,6 +6,7 @@ import time
 import os
 from datetime import datetime, time as datetime_time
 import praw
+import asyncio
 
 # Initialize the Discord bot
 intents = discord.Intents.default()
@@ -46,7 +47,7 @@ def get_random_game_name():
             if str(appid) in data and data[str(appid)]['success']:
                 game_name = data[str(appid)]['data']['name']
                 return game_name
-        time.sleep(1)  # Avoid hammering the API
+        asyncio.sleep(1)  # Avoid hammering the API
 
 @tasks.loop(minutes=30)
 async def change_status():
