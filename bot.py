@@ -51,7 +51,7 @@ async def get_random_game_name():
 
 @tasks.loop(minutes=30)
 async def change_status():
-    game_name = get_random_game_name()
+    game_name = await get_random_game_name()
     await bot.change_presence(activity=discord.Game(name=game_name))
     print(f'Changed status to: Playing {game_name}')
 
