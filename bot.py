@@ -99,8 +99,8 @@ def get_random_article():
         return title, selftext
     return None, None
 
-MAIN_CHANNEL_ID = 1120692192990744658  # test channel
-#MAIN_CHANNEL_ID = 1066079471439978551  # luitenant-generaal
+#MAIN_CHANNEL_ID = 1120692192990744658  # test channel
+MAIN_CHANNEL_ID = 1066079471439978551  # luitenant-generaal
 
 @tasks.loop(hours=3)
 async def post_meme():
