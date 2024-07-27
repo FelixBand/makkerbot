@@ -82,7 +82,7 @@ async def on_message(message):
         await message.reply(response.strip())
     if message.author.name == '_knorrie':
         if any(keyword in message.content.lower() for keyword in KEYWORDS):
-            await message.reply("haha")
+            await message.reply("https://tenor.com/view/cring-cat-orange-cat-meow-gif-8992000534050452862")
 
 def get_random_meme():
     subreddit = reddit.subreddit("memes")
