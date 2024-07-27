@@ -14,6 +14,7 @@ intents.message_content = True
 bot = commands.Bot(command_prefix='!', intents=intents)
 
 USER_TO_MONITOR = 'ltsbeary'
+KEYWORDS = ['sukuna', 'domain expansion', 'domain-expansion']
 GIF_SERVICES = ['https://tenor.com', 'https://giphy.com', 'https://imgur.com', 'https://cdn.discord.com']
 
 with open('reddit-secrets/secret.txt', 'r') as file:
@@ -79,6 +80,9 @@ async def on_message(message):
         responses = get_personal_response(message.author.name)
         response = random.choice(responses)
         await message.reply(response.strip())
+    if message.author.name == '_knorrie':
+        if any(keyword in message.content.lower() for keyword in KEYWORDS):
+            await message.reply("haha")
 
 def get_random_meme():
     subreddit = reddit.subreddit("memes")
