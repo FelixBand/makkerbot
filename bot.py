@@ -71,11 +71,11 @@ def get_personal_response(user_name):
 
 @bot.event
 async def on_message(message):
-    if message.author.name == USER_TO_MONITOR:
-        for gif_service in GIF_SERVICES:
-            if message.content.startswith(gif_service):
-                await message.reply("epic embed fail")
-                break
+    # if message.author.name == USER_TO_MONITOR:
+    #     for gif_service in GIF_SERVICES:
+    #         if message.content.startswith(gif_service):
+    #             await message.reply("epic embed fail")
+    #             break
     if bot.user.mentioned_in(message):
         responses = get_personal_response(message.author.name)
         response = random.choice(responses)
