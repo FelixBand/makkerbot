@@ -85,7 +85,7 @@ async def on_message(message):
             await message.reply("https://tenor.com/view/cring-cat-orange-cat-meow-gif-8992000534050452862")
 
 def get_random_meme():
-    subreddit = reddit.subreddit("memes")
+    subreddit = reddit.subreddit("shitposting")
     meme_list = list(subreddit.hot(limit=50))  # Fetch top 50 hot posts
     meme = random.choice(meme_list)
     return meme.url
