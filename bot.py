@@ -104,15 +104,19 @@ def get_random_article():
         return title, selftext
     return None, None
 
+def get_time_to_post():
+    current_time = datetime.now().time()
+    start_time = datetime_time(11, 0)  # 11:00
+    end_time = datetime_time(23, 0)    # 23:00
+    if start_time <= current_time <= end_time:
+        return True
+
 #MAIN_CHANNEL_ID = 1120692192990744658  # test channel
 MAIN_CHANNEL_ID = 1066079471439978551  # luitenant-generaal
 
 @tasks.loop(hours=2)
 async def post_meme():
-    current_time = datetime.now().time()
-    start_time = datetime_time(11, 0)  # 11:00
-    end_time = datetime_time(23, 0)    # 23:00
-    if start_time <= current_time <= end_time:
+    if get_time_to_post():
         meme_channel = bot.get_channel(MAIN_CHANNEL_ID)
         if meme_channel is not None:
             meme_url = get_random_meme()
@@ -121,21 +125,22 @@ async def post_meme():
         else:
             print(f'Channel with ID {MAIN_CHANNEL_ID} not found.')
 
-@tasks.loop(hours=6)
+@tasks.loop(hours=4)
 async def post_article():
-    help_channel = bot.get_channel(MAIN_CHANNEL_ID)
-    if help_channel is not None:
-        title, selftext = get_random_article()
-        if title and selftext:
-            # Clean up text
-            selftext = selftext.replace("\\n", "\n").strip()
-            message = f"**{title}**\n\n{selftext}"
-            await help_channel.send(message)
-            print(f'Posted article: {title}')
+    if get_time_to_post():
+        help_channel = bot.get_channel(MAIN_CHANNEL_ID)
+        if help_channel is not None:
+            title, selftext = get_random_article()
+            if title and selftext:
+                # Clean up text
+                selftext = selftext.replace("\\n", "\n").strip()
+                message = f"**{title}**\n\n{selftext}"
+                await help_channel.send(message)
+                print(f'Posted article: {title}')
+            else:
+                print('Failed to fetch article.')
         else:
-            print('Failed to fetch article.')
-    else:
-        print(f'Channel with ID {MAIN_CHANNEL_ID} not found.')
+            print(f'Channel with ID {MAIN_CHANNEL_ID} not found.')
 
 with open('api-key.txt', 'r') as file:
     api_key = file.read().strip()
