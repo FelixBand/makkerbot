@@ -2,7 +2,6 @@ import discord
 from discord.ext import commands, tasks
 import requests
 import random
-import time
 import os
 from datetime import datetime, time as datetime_time
 import praw
@@ -34,8 +33,6 @@ reddit = praw.Reddit(
 async def on_ready():
     print(f'Logged in as {bot.user.name}')
     change_status.start()  # Start the task to change status
-    post_meme.start()  # Start the task to post memes
-    post_article.start()  # Start the task to post articles
 
 async def get_random_game_name():
     while True:
@@ -52,7 +49,7 @@ async def get_random_game_name():
 
 @tasks.loop(minutes=30)
 async def change_status():
-    game_name = await get_random_game_name()
+    game_name = await get_random_game_name()  # Ensure this line awaits the coroutine
     await bot.change_presence(activity=discord.Game(name=game_name))
     print(f'Changed status to: Playing {game_name}')
 
@@ -83,15 +80,16 @@ async def on_message(message):
     if message.author.name == '_knorrie':
         if any(keyword in message.content.lower() for keyword in KEYWORDS):
             await message.reply("https://tenor.com/view/cring-cat-orange-cat-meow-gif-8992000534050452862")
+    await bot.process_commands(message)  # Ensures other commands are processed
 
 def get_random_meme():
-    subreddit = reddit.subreddit("shitposting")
+    subreddit = reddit.subreddit("memes")
     meme_list = list(subreddit.hot(limit=50))  # Fetch top 50 hot posts
     meme = random.choice(meme_list)
     return meme.url
 
-def get_random_article():
-    subreddit = reddit.subreddit("funfacts")
+def get_random_help_article():
+    subreddit = reddit.subreddit("help")
     article_list = list(subreddit.hot(limit=50))  # Fetch top 50 hot posts
     article = random.choice(article_list)
     json_url = f"https://www.reddit.com{article.permalink}.json"
@@ -104,43 +102,36 @@ def get_random_article():
         return title, selftext
     return None, None
 
+MEME_CHANNEL_ID = 1120692192990744658  # test channel
+#MEME_CHANNEL_ID = 1066079471439978551  # luitenant-generaal
+
 def get_time_to_post():
     current_time = datetime.now().time()
     start_time = datetime_time(11, 0)  # 11:00
     end_time = datetime_time(23, 0)    # 23:00
-    if start_time <= current_time <= end_time:
-        return True
+    return start_time <= current_time <= end_time
 
-#MAIN_CHANNEL_ID = 1120692192990744658  # test channel
-MAIN_CHANNEL_ID = 1066079471439978551  # luitenant-generaal
+@bot.command(name='meme')
+async def meme(ctx):
+    meme_url = get_random_meme()
+    await ctx.send(meme_url)
+    print(f'Sent meme: {meme_url}')
 
-@tasks.loop(hours=2)
-async def post_meme():
-    if get_time_to_post():
-        meme_channel = bot.get_channel(MAIN_CHANNEL_ID)
-        if meme_channel is not None:
-            meme_url = get_random_meme()
-            await meme_channel.send(meme_url)
-            print(f'Posted meme: {meme_url}')
+@tasks.loop(hours=1)
+async def post_help_article():
+    help_channel = bot.get_channel(MEME_CHANNEL_ID)
+    if help_channel is not None:
+        title, selftext = get_random_help_article()
+        if title and selftext:
+            # Clean up text
+            selftext = selftext.replace("\\n", "\n").strip()
+            message = f"**{title}**\n\n{selftext}"
+            await help_channel.send(message)
+            print(f'Posted help article: {title}')
         else:
-            print(f'Channel with ID {MAIN_CHANNEL_ID} not found.')
-
-@tasks.loop(hours=4)
-async def post_article():
-    if get_time_to_post():
-        help_channel = bot.get_channel(MAIN_CHANNEL_ID)
-        if help_channel is not None:
-            title, selftext = get_random_article()
-            if title and selftext:
-                # Clean up text
-                selftext = selftext.replace("\\n", "\n").strip()
-                message = f"**{title}**\n\n{selftext}"
-                await help_channel.send(message)
-                print(f'Posted article: {title}')
-            else:
-                print('Failed to fetch article.')
-        else:
-            print(f'Channel with ID {MAIN_CHANNEL_ID} not found.')
+            print('Failed to fetch help article.')
+    else:
+        print(f'Channel with ID {MEME_CHANNEL_ID} not found.')
 
 with open('api-key.txt', 'r') as file:
     api_key = file.read().strip()
