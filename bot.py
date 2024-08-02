@@ -102,8 +102,8 @@ def get_random_help_article():
         return title, selftext
     return None, None
 
-MEME_CHANNEL_ID = 1120692192990744658  # test channel
-#MEME_CHANNEL_ID = 1066079471439978551  # luitenant-generaal
+#MEME_CHANNEL_ID = 1120692192990744658  # test channel
+MEME_CHANNEL_ID = 1066079471439978551  # luitenant-generaal
 
 def get_time_to_post():
     current_time = datetime.now().time()
