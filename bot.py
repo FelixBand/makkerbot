@@ -31,6 +31,12 @@ reddit = praw.Reddit(
 
 @bot.event
 async def on_ready():
+    global MEME_CHANNEL_ID
+    if bot.user.name == "Je beste makker":
+        MEME_CHANNEL_ID = 1066079471439978551  # luitenant-generaal
+    else:
+        MEME_CHANNEL_ID = 1120692192990744658  # test channel
+
     print(f'Logged in as {bot.user.name}')
     change_status.start()  # Start the task to change status
 
@@ -82,28 +88,28 @@ async def on_message(message):
             await message.reply("https://tenor.com/view/cring-cat-orange-cat-meow-gif-8992000534050452862")
     await bot.process_commands(message)  # Ensures other commands are processed
 
-def get_random_meme():
-    subreddit = reddit.subreddit("memes")
-    meme_list = list(subreddit.hot(limit=50))  # Fetch top 50 hot posts
-    meme = random.choice(meme_list)
-    return meme.url
+def get_random_post(subreddit):
+    subreddit = reddit.subreddit(subreddit)
+    post_list = list(subreddit.hot(limit=50))  # Fetch top 50 hot posts
+    post = random.choice(post_list)
+    return post.url
 
-def get_random_help_article():
-    subreddit = reddit.subreddit("help")
+def get_random_article():
+    subreddit = reddit.subreddit("incestconfessions")
     article_list = list(subreddit.hot(limit=50))  # Fetch top 50 hot posts
-    article = random.choice(article_list)
-    json_url = f"https://www.reddit.com{article.permalink}.json"
-    response = requests.get(json_url, headers={"User-agent": REDDIT_USER_AGENT})
-    if response.status_code == 200:
-        data = response.json()
-        post_data = data[0]['data']['children'][0]['data']
-        title = post_data['title']
-        selftext = post_data['selftext']
-        return title, selftext
-    return None, None
-
-#MEME_CHANNEL_ID = 1120692192990744658  # test channel
-MEME_CHANNEL_ID = 1066079471439978551  # luitenant-generaal
+    for _ in range(10):  # Try up to 10 times to get a suitable article
+        article = random.choice(article_list)
+        json_url = f"https://www.reddit.com{article.permalink}.json"
+        response = requests.get(json_url, headers={"User-agent": REDDIT_USER_AGENT})
+        if response.status_code == 200:
+            data = response.json()
+            post_data = data[0]['data']['children'][0]['data']
+            title = post_data['title']
+            selftext = post_data['selftext']
+            message = f"**{title}**\n\n{selftext}"
+            if len(message) < 2000:
+                return message
+    return None
 
 def get_time_to_post():
     current_time = datetime.now().time()
@@ -113,23 +119,20 @@ def get_time_to_post():
 
 @bot.command(name='meme')
 async def meme(ctx):
-    meme_url = get_random_meme()
+    meme_url = get_random_post("memes")
     await ctx.send(meme_url)
     print(f'Sent meme: {meme_url}')
 
-@tasks.loop(hours=1)
-async def post_help_article():
+@bot.command(name='confession')
+async def confession(ctx):
     help_channel = bot.get_channel(MEME_CHANNEL_ID)
     if help_channel is not None:
-        title, selftext = get_random_help_article()
-        if title and selftext:
-            # Clean up text
-            selftext = selftext.replace("\\n", "\n").strip()
-            message = f"**{title}**\n\n{selftext}"
+        message = get_random_article()
+        if message:
             await help_channel.send(message)
-            print(f'Posted help article: {title}')
+            print(f'Posted help article.')
         else:
-            print('Failed to fetch help article.')
+            print('Failed to fetch a suitable help article.')
     else:
         print(f'Channel with ID {MEME_CHANNEL_ID} not found.')
 
