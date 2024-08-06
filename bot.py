@@ -12,7 +12,7 @@ intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix='!', intents=intents)
 
-USER_TO_MONITOR = 'ltsbeary' # Currently disabled, because he got embed perms back.
+USER_TO_MONITOR = 'layawn_' # Currently disabled, because he got embed perms back.
 KEYWORDS = ['sukuna', 'domain expansion', 'domain-expansion']
 GIF_SERVICES = ['https://tenor.com', 'https://giphy.com', 'https://imgur.com', 'https://cdn.discord.com']
 
