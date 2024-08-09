@@ -68,7 +68,7 @@ general_responses = load_responses('responses/responses.txt')
 def get_personal_response(user_name):
     personal_file_path = f'responses/responses-{user_name}.txt'
     if os.path.exists(personal_file_path):
-        if random.random() < 0.3:  # 30% chance
+        if random.random() < 0.4:  # 40% chance
             return load_responses(personal_file_path)
     return general_responses
 
