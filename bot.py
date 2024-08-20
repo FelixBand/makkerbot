@@ -95,7 +95,10 @@ def get_random_post(subreddit):
     return post.url
 
 def get_random_article():
-    subreddit = reddit.subreddit("incestconfessions")
+    if random.random() < 0.4:  # 40% chance
+        subreddit = reddit.subreddit("incestconfessions")
+    else:
+        subreddit = reddit.subreddit("TrueOffMyChest")
     article_list = list(subreddit.hot(limit=50))  # Fetch top 50 hot posts
     for _ in range(10):  # Try up to 10 times to get a suitable article
         article = random.choice(article_list)
