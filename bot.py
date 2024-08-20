@@ -95,7 +95,7 @@ def get_random_post(subreddit):
     return post.url
 
 def get_random_article():
-    if random.random() < 0.4:  # 40% chance
+    if random.random() < 0.1:  # 10% chance
         subreddit = reddit.subreddit("incestconfessions")
     else:
         subreddit = reddit.subreddit("TrueOffMyChest")
