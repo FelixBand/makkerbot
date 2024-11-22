@@ -33,9 +33,9 @@ reddit = praw.Reddit(
 async def on_ready():
     global MEME_CHANNEL_ID
     if bot.user.name == "Je beste makker":
-        MEME_CHANNEL_ID = 1066079471439978551  # luitenant-generaal
+        MEME_CHANNEL_ID = 827122756193091647  # luitenant-generaal
     else:
-        MEME_CHANNEL_ID = 1120692192990744658  # test channel
+        MEME_CHANNEL_ID = 827122756193091647  # test channel
 
     print(f'Logged in as {bot.user.name}')
     change_status.start()  # Start the task to change status
